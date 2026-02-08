@@ -2,7 +2,7 @@
 layout: home
 permalink: index.html
 
-repository-name: e21-3yp-magicmirror
+repository-name: e21-3yp-MirrorX
 title: "MirrorX: Intelligent Smart Mirror Platform"
 ---
 
