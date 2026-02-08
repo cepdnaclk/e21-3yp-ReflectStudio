@@ -34,7 +34,7 @@ title: Magic Mirror
 6. [Conclusion](#conclusion)
 7. [Links](#links)
 
-Introduction
+## Introduction
 
 The Real World Problem
 
@@ -46,7 +46,7 @@ Technological Barriers: Smart home interfaces are often too complex for elderly 
 
 Passive Environments: Standard mirrors and home devices are passive; they don't actively monitor the environment or intervene when safety conditions (like heatwaves) become dangerous.
 
-The Solution
+## The Solution
 
 ReflectOS transforms a standard mirror into an intelligent, proactive "Caregiver Companion." It bridges the gap between passive furniture and active health monitoring. Key features include:
 
@@ -58,11 +58,11 @@ Non-Intrusive Dashboard: A mobile app for caregivers that tracks environmental s
 
 "The Puppeteer" Communication: Family members can type messages in the app that are spoken aloud and displayed on the mirror to ensure important reminders are noticed.
 
-Impact
+## Impact
 
 ReflectOS empowers elderly users to live independently while giving families peace of mind. It replaces invasive surveillance with smart environmental monitoring and turns a daily object into a safety net, making home care more dignified and responsive.
 
-Solution Architecture
+## Solution Architecture
 
 High-Level Diagram
 
@@ -88,7 +88,7 @@ Actuators: 5V Relay module controlling a DC cooling fan for the "Wind Guardian" 
 
 Camera: Raspberry Pi Camera Module V2 for facial recognition.
 
-Software
+## Software
 
 Mobile App: Built with Flutter (Dart). Features include "Remote Selfie Enrollment," real-time dashboard graphs, and text-to-speech injection.
 
@@ -98,7 +98,7 @@ AI & Logic: Python scripts using OpenCV/Dlib for face recognition and GPIO libra
 
 Cloud Backend: Supabase for database management, authentication, and object storage.
 
-Testing
+## Testing
 
 Hardware Testing
 
@@ -108,7 +108,7 @@ Thermal Stress Testing: Tested the cooling fan's response time when the system w
 
 Biometric Range Test: Evaluated the camera's ability to recognize faces at varying distances and lighting conditions.
 
-Software Testing
+## Software Testing
 
 Latency Testing: Measured the time delay between toggling a switch in the Flutter app and the physical reaction on the mirror (fan on/off).
 
