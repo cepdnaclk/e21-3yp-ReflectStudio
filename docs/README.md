@@ -14,10 +14,10 @@ title: "ReflectOS: Smart Mirror & Caregiver Companion"
 ---
 
 ## Team
--  e21287, Sithum Perera, [email](e21287@eng.pdn.ac.lk)
--  e21229, Anna Kurera, [email](e21229@eng.pdn.ac.lk)
--  e21055, Kasun Lakshan, [email](e21055@eng.pdn.ac.lk)
--  e21253, Thenuka Ravindu, [email](e21253@eng.pdn.ac.lk)
+-  e21287, Sithum Perera, [e21287@eng.pdn.ac.lk](mailto:e21287@eng.pdn.ac.lk)
+-  e21229, Anna Kurera, [e21229@eng.pdn.ac.lk](mailto:e21229@eng.pdn.ac.lk)
+-  e21055, Kasun Lakshan, [e21055@eng.pdn.ac.lk](mailto:e21055@eng.pdn.ac.lk)
+-  e21253, Thenuka Ravindu, [e21253@eng.pdn.ac.lk](mailto:e21253@eng.pdn.ac.lk)
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
 
