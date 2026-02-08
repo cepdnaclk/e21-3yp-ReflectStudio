@@ -2,151 +2,183 @@
 layout: home
 permalink: index.html
 
-# Please update this with your repository name and project title
 repository-name: e21-3yp-magicmirror
-title: "ReflectOS: Smart Mirror & Caregiver Companion"
+title: "MirrorX: Intelligent Smart Mirror Platform"
 ---
 
-[comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
-
-# ReflectOS: Smart Mirror & Caregiver Companion
+# MirrorX: Intelligent Smart Mirror Platform
 
 ---
 
 ## Team
--  e21287, Sithum Perera, [e21287@eng.pdn.ac.lk](mailto:e21287@eng.pdn.ac.lk)
--  e21229, Anna Kurera, [e21229@eng.pdn.ac.lk](mailto:e21229@eng.pdn.ac.lk)
--  e21055, Kasun Lakshan, [e21055@eng.pdn.ac.lk](mailto:e21055@eng.pdn.ac.lk)
--  e21253, Thenuka Ravindu, [e21253@eng.pdn.ac.lk](mailto:e21253@eng.pdn.ac.lk)
+- e21287, Sithum Perera, [e21287@eng.pdn.ac.lk](mailto:e21287@eng.pdn.ac.lk)
+- e21229, Anna Kurera, [e21229@eng.pdn.ac.lk](mailto:e21229@eng.pdn.ac.lk)
+- e21055, Kasun Lakshan, [e21055@eng.pdn.ac.lk](mailto:e21055@eng.pdn.ac.lk)
+- e21253, Thenuka Ravindu, [e21253@eng.pdn.ac.lk](mailto:e21253@eng.pdn.ac.lk)
 
-<!-- Image (photo/drawing of the final hardware) should be here -->
+<!-- Image of final hardware setup -->
 
-<!-- This is a sample image, to show how to add images to your page. To learn more options, please refer [this](https://projects.ce.pdn.ac.lk/docs/faq/how-to-add-an-image/) -->
-
-<!-- ![Sample Image](./images/sample.png) -->
+---
 
 #### Table of Contents
 1. [Introduction](#introduction)
-2. [Solution Architecture](#solution-architecture )
-3. [Hardware & Software Designs](#hardware-and-software-designs)
+2. [Solution Architecture](#solution-architecture)
+3. [Hardware & Software Designs](#hardware--software-designs)
 4. [Testing](#testing)
-5. [Detailed budget](#detailed-budget)
-6. [Conclusion](#conclusion)
-7. [Links](#links)
+5. [Detailed Budget](#detailed-budget)
+6. [Commercialization Plans](#commercialization-plans)
+7. [Conclusion](#conclusion)
+8. [Links](#links)
+
+---
 
 ## Introduction
 
-The Real World Problem
+### The Real-World Problem
 
-Caring for elderly or less mobile individuals at home often comes with significant challenges:
+With the rapid growth of smart homes and AI-powered devices, technology often prioritizes features over **human-centered experience**. Users are required to interact with multiple fragmented applications to manage daily tasks such as checking schedules, emails, weather, or controlling smart devices. Even simple daily routines—like getting ready in front of a mirror—remain disconnected from productivity and meaningful interaction.
 
-Intrusive Monitoring: Traditional methods like security cameras can feel invasive and strip users of their dignity and privacy.
+For elderly users, these challenges are amplified. Complex interfaces, limited interaction, and lack of emotional engagement can make technology feel intimidating and isolating. While homes may collect environmental data such as temperature or humidity, they rarely provide **interactive communication, companionship, or intuitive assistance**. As a result, technology often feels cold, impersonal, and overwhelming instead of supportive and reassuring.
 
-Technological Barriers: Smart home interfaces are often too complex for elderly users, leading to frustration and abandonment of helpful technology.
-
-Passive Environments: Standard mirrors and home devices are passive; they don't actively monitor the environment or intervene when safety conditions (like heatwaves) become dangerous.
+---
 
 ## The Solution
 
-ReflectOS transforms a standard mirror into an intelligent, proactive "Caregiver Companion." It bridges the gap between passive furniture and active health monitoring. Key features include:
+**MirrorX** transforms a standard mirror into an **intelligent smart mirror platform** that acts as a **personal assistant, smart home hub, and digital companion**.
 
-Zero-Friction Biometric Enrollment: Caregivers can register users remotely by taking a selfie via the mobile app, instantly enabling secure, touch-free access on the mirror.
+For everyday users, MirrorX helps utilize time effectively by displaying **schedules, emails, weather updates, music controls, and reminders** while getting ready—turning idle mirror time into productive moments. For elderly users, MirrorX provides a **conversational AI persona** that enables natural interaction and companionship, along with **environmental monitoring** that detects unusual temperature or humidity conditions to support comfort and safety.
 
-"The Wind Guardian": An autonomous climate control system that monitors room temperature and automatically triggers cooling fans if conditions become unsafe (e.g., >25°C).
+MirrorX combines **AI, IoT, and automation** with **voice, gesture, and face recognition**, offering a **hands-free, intuitive, and privacy-aware experience** suitable for both daily living and assisted care scenarios.
 
-Non-Intrusive Dashboard: A mobile app for caregivers that tracks environmental stats (temperature, humidity) and activity logs without using video feeds.
-
-"The Puppeteer" Communication: Family members can type messages in the app that are spoken aloud and displayed on the mirror to ensure important reminders are noticed.
-
-## Impact
-
-ReflectOS empowers elderly users to live independently while giving families peace of mind. It replaces invasive surveillance with smart environmental monitoring and turns a daily object into a safety net, making home care more dignified and responsive.
+---
 
 ## Solution Architecture
 
-High-Level Diagram
+### High-Level Overview
 
-The system consists of three main layers working in sync:
+MirrorX follows a **Hybrid Edge–Cloud Architecture** consisting of three main layers:
 
-The Controller (Mobile App): A Flutter app for remote management, user enrollment, and environmental monitoring.
+- **User Layer**
+  - Interaction via voice, gestures, and presence
+  - Personalized dashboard display on the mirror
 
-The Bridge (Cloud): Supabase (PostgreSQL + Storage) handles real-time synchronization of settings and biometric data.
+- **Edge Intelligence Layer**
+  - Raspberry Pi handles sensor data processing
+  - Local face encoding and recognition for fast authentication
+  - Real-time control logic for smart devices
 
-The Brain (IoT Device): A Raspberry Pi 4 that powers the display, runs local AI (Face Recognition), and controls physical hardware.
+- **Cloud Intelligence Layer**
+  - **AWS S3** for secure profile image storage
+  - **AWS Rekognition** for cloud-based facial recognition
+  - Cloud AI services for conversational intelligence
+  - Secure APIs for mobile app communication
 
-Hardware and Software Designs
+---
 
-Hardware Components
+## Hardware & Software Designs
 
-Computing Unit: Raspberry Pi 4 Model B (4GB/8GB) acting as the central processor.
+### Hardware Components
 
-Display: A standard monitor panel housed behind a two-way acrylic mirror.
+| Component | Description |
+|--------|------------|
+| Raspberry Pi 4 | Central processing and control unit |
+| Monitor + Two-Way Mirror | Visual interface for smart display |
+| Camera Module 3 | Face recognition and user identification |
+| BME280 | Temperature and humidity sensing |
+| OPT3001 | Ambient light sensing |
+| HLK-LD2410 Radar | Presence detection |
+| Gesture Sensor (VL53L0X) | Gesture-based interaction |
+| WS2812B LED Strip | Smart lighting and visual feedback |
+| ESP32 | Smart switch and device control |
+| Relay Module | Fan and device actuation |
+| Microphone & Speakers | Voice interaction and AI responses |
 
-Sensor Array: BME280 sensor for precise temperature, humidity, and pressure readings.
+---
 
-Actuators: 5V Relay module controlling a DC cooling fan for the "Wind Guardian" feature.
+### Software Components
 
-Camera: Raspberry Pi Camera Module V2 for facial recognition.
+- **Smart Mirror Application**
+  - Python-based backend logic
+  - OpenCV for local face processing
+  - Real-time sensor monitoring and automation
 
-## Software
+- **AI Persona**
+  - Speech-to-text and text-to-speech pipeline
+  - Cloud-based conversational AI integration
 
-Mobile App: Built with Flutter (Dart). Features include "Remote Selfie Enrollment," real-time dashboard graphs, and text-to-speech injection.
+- **Mobile Companion App**
+  - Built using Flutter
+  - Face profile enrollment
+  - Reminder scheduling and remote monitoring
+  - Guardian/caregiver access
 
-Smart Mirror Interface: Built with Node.js/Electron to render the "Glass UI" (Clock, News, Alerts).
+- **Communication Protocols**
+  - MQTT for IoT messaging
+  - HTTPS for secure cloud communication
 
-AI & Logic: Python scripts using OpenCV/Dlib for face recognition and GPIO libraries for sensor/fan control.
-
-Cloud Backend: Supabase for database management, authentication, and object storage.
+---
 
 ## Testing
 
-Hardware Testing
+### Hardware Testing
+- Sensor accuracy validation for temperature, humidity, and light intensity
+- Presence detection range and reliability testing
+- Relay and smart device response verification
 
-Sensor Calibration: Verified BME280 readings against standard thermometers to ensure accurate triggers for the "Wind Guardian."
+### Software Testing
+- Face recognition accuracy under varying lighting conditions
+- Latency testing for mobile app to mirror communication
+- AI interaction response time evaluation
+- Fail-safe testing for autonomous fan and lighting control
 
-Thermal Stress Testing: Tested the cooling fan's response time when the system was subjected to simulated heat loads.
+---
 
-Biometric Range Test: Evaluated the camera's ability to recognize faces at varying distances and lighting conditions.
-
-## Software Testing
-
-Latency Testing: Measured the time delay between toggling a switch in the Flutter app and the physical reaction on the mirror (fan on/off).
-
-Cross-Platform Image Handling: Verified that images taken on both Android and Web platforms are correctly converted to byte data and uploaded to Supabase without file path errors.
-
-Security Audit: Tested the Supabase Row Level Security (RLS) policies to ensure unauthorized users cannot upload or access biometric data.
-
-## Budget
+## Detailed Budget
 
 | Item | Status | Cost (Rs.) |
-| :--- | :--- | :--- |
+|------|--------|-----------|
 | Raspberry Pi 4 Model B | Available | 26,000 |
-| Rpi4 camera module 3 | Available | 5,690 |
-| Two way mirror | Approx. | 8,500 |
-| Monitor screen | - | 12,000 |
-| Temperature & Humidity sensor (BME280) | - | 950 |
-| Light Intensity Sensor (OPT3001) | - | 995 |
-| Wooden / 3D Printed Frame | Approx. | 6,000 |
-| Mic | - | 950 |
+| Camera Module 3 | Available | 5,690 |
+| Two-Way Mirror | Approx. | 8,500 |
+| Monitor Screen | - | 12,000 |
+| BME280 Sensor | - | 950 |
+| OPT3001 Sensor | - | 995 |
+| Frame (Wood / 3D Printed) | Approx. | 6,000 |
+| Microphone | - | 950 |
 | Speakers | - | 8,570 |
-| Gesture sensor (ST GY-VL53L0XV2) x2 | - | 1,200 |
-| Addressable led strip (WS2812B) (2m) | - | 1,380 |
-| Esp32 (For the smart switch) | - | 1,280 |
-| Presence detector (HLK-LD2410) | - | 1,285 |
-| **Total** | | **Rs. 74,700** |
-| **Budget (excluding available items)** | | **Rs. 43,010** |
+| Gesture Sensors x2 | - | 1,200 |
+| WS2812B LED Strip | - | 1,380 |
+| ESP32 | - | 1,280 |
+| Presence Sensor (HLK-LD2410) | - | 1,285 |
+| **Total** | | **74,700** |
+| **Excluding Available Items** | | **43,010** |
+
+---
 
 ## Commercialization Plans
 
-The project has been designed with a focus on cost-effectiveness and scalability, making it a viable candidate for a commercial consumer product:
+- **Consumer Smart Home Product**
+  - Daily-use smart mirror for homes
 
-Modular DIY Kits: Offering the electronics (pre-configured Raspberry Pi, sensors, and camera) as a modular kit for tech enthusiasts to build into their own frames.
+- **Assisted Living & Elder Care**
+  - Companion-focused versions with caregiver dashboards
 
-Custom Luxury Models: Developing high-end, fully assembled mirrors with premium wooden or 3D-printed frames for the smart home and hospitality markets (e.g., hotels or fitness studios).
+- **Hospitality & Retail**
+  - Smart mirrors for hotels, gyms, and fitting rooms
 
-Subscription-Based Customization: Creating a cloud platform where users can purchase and download premium "mirror skins" or advanced AI modules to further personalize their device.
+- **Modular DIY Kits**
+  - Pre-configured electronics kits for enthusiasts
 
-B2B Applications: Marketing specialized versions of the mirror for use as digital notice boards in offices, schools, or retail fitting rooms.
+- **Premium Models**
+  - High-end mirror designs with luxury finishes
+
+---
+
+## Conclusion
+
+MirrorX demonstrates how everyday objects can be transformed into **intelligent, emotionally aware systems** through the integration of AI and IoT. By focusing on **human-centered interaction, privacy-first design, and hybrid intelligence**, MirrorX delivers a smart mirror platform that supports productivity, companionship, and comfort—making technology feel **natural, supportive, and human**.
+
+---
 
 ## Links
 
@@ -154,6 +186,3 @@ B2B Applications: Marketing specialized versions of the mirror for use as digita
 - [Project Page](https://cepdnaclk.github.io/{{ page.repository-name}}){:target="_blank"}
 - [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
 - [University of Peradeniya](https://eng.pdn.ac.lk/)
-
-[//]: # (Please refer this to learn more about Markdown syntax)
-[//]: # (https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
