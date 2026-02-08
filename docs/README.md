@@ -3,8 +3,8 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and project title
-repository-name: eYY-3yp-project-template
-title: Project Template
+repository-name: eYY-3yp-magicmirror
+title: Magic Mirror
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
@@ -14,9 +14,10 @@ title: Project Template
 ---
 
 ## Team
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
+-  e21287, Sithum Perera, [email](e21287@eng.pdn.ac.lk)
+-  e21229, Anna Kurera, [email](e21229@eng.pdn.ac.lk)
+-  e21055, Kasun Lakshan, [email](e21055@eng.pdn.ac.lk)
+-  e21253, Thenuka Ravindu, [email](e21253@eng.pdn.ac.lk)
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
 
@@ -33,26 +34,87 @@ title: Project Template
 6. [Conclusion](#conclusion)
 7. [Links](#links)
 
-## Introduction
+Introduction
 
-Description of the real world problem and solution, impact
+The Real World Problem
 
+Caring for elderly or less mobile individuals at home often comes with significant challenges:
 
-## Solution Architecture
+Intrusive Monitoring: Traditional methods like security cameras can feel invasive and strip users of their dignity and privacy.
 
-High level diagram + description
+Technological Barriers: Smart home interfaces are often too complex for elderly users, leading to frustration and abandonment of helpful technology.
 
-## Hardware and Software Designs
+Passive Environments: Standard mirrors and home devices are passive; they don't actively monitor the environment or intervene when safety conditions (like heatwaves) become dangerous.
 
-Detailed designs with many sub-sections
+The Solution
 
-## Testing
+ReflectOS transforms a standard mirror into an intelligent, proactive "Caregiver Companion." It bridges the gap between passive furniture and active health monitoring. Key features include:
 
-Testing done on hardware and software, detailed + summarized results
+Zero-Friction Biometric Enrollment: Caregivers can register users remotely by taking a selfie via the mobile app, instantly enabling secure, touch-free access on the mirror.
 
-## Detailed budget
+"The Wind Guardian": An autonomous climate control system that monitors room temperature and automatically triggers cooling fans if conditions become unsafe (e.g., >25°C).
 
-All items and costs
+Non-Intrusive Dashboard: A mobile app for caregivers that tracks environmental stats (temperature, humidity) and activity logs without using video feeds.
+
+"The Puppeteer" Communication: Family members can type messages in the app that are spoken aloud and displayed on the mirror to ensure important reminders are noticed.
+
+Impact
+
+ReflectOS empowers elderly users to live independently while giving families peace of mind. It replaces invasive surveillance with smart environmental monitoring and turns a daily object into a safety net, making home care more dignified and responsive.
+
+Solution Architecture
+
+High-Level Diagram
+
+The system consists of three main layers working in sync:
+
+The Controller (Mobile App): A Flutter app for remote management, user enrollment, and environmental monitoring.
+
+The Bridge (Cloud): Supabase (PostgreSQL + Storage) handles real-time synchronization of settings and biometric data.
+
+The Brain (IoT Device): A Raspberry Pi 4 that powers the display, runs local AI (Face Recognition), and controls physical hardware.
+
+Hardware and Software Designs
+
+Hardware Components
+
+Computing Unit: Raspberry Pi 4 Model B (4GB/8GB) acting as the central processor.
+
+Display: A standard monitor panel housed behind a two-way acrylic mirror.
+
+Sensor Array: BME280 sensor for precise temperature, humidity, and pressure readings.
+
+Actuators: 5V Relay module controlling a DC cooling fan for the "Wind Guardian" feature.
+
+Camera: Raspberry Pi Camera Module V2 for facial recognition.
+
+Software
+
+Mobile App: Built with Flutter (Dart). Features include "Remote Selfie Enrollment," real-time dashboard graphs, and text-to-speech injection.
+
+Smart Mirror Interface: Built with Node.js/Electron to render the "Glass UI" (Clock, News, Alerts).
+
+AI & Logic: Python scripts using OpenCV/Dlib for face recognition and GPIO libraries for sensor/fan control.
+
+Cloud Backend: Supabase for database management, authentication, and object storage.
+
+Testing
+
+Hardware Testing
+
+Sensor Calibration: Verified BME280 readings against standard thermometers to ensure accurate triggers for the "Wind Guardian."
+
+Thermal Stress Testing: Tested the cooling fan's response time when the system was subjected to simulated heat loads.
+
+Biometric Range Test: Evaluated the camera's ability to recognize faces at varying distances and lighting conditions.
+
+Software Testing
+
+Latency Testing: Measured the time delay between toggling a switch in the Flutter app and the physical reaction on the mirror (fan on/off).
+
+Cross-Platform Image Handling: Verified that images taken on both Android and Web platforms are correctly converted to byte data and uploaded to Supabase without file path errors.
+
+Security Audit: Tested the Supabase Row Level Security (RLS) policies to ensure unauthorized users cannot upload or access biometric data.
 
 | Item          | Quantity  | Unit Cost  | Total  |
 | ------------- |:---------:|:----------:|-------:|
