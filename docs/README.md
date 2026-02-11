@@ -2,21 +2,19 @@
 layout: home
 permalink: index.html
 
-repository-name: e21-3yp-MirrorX
-title: "MirrorX: Intelligent Smart Mirror Platform"
+repository-name: e21-3yp-ReflectStudio
+title: "ReflectStudio: Intelligent Smart Mirror Platform"
 ---
 
-# MirrorX: Intelligent Smart Mirror Platform
+# ReflectStudio: Intelligent Smart Mirror Platform
 
 ---
 
 ## Team
-- e21287, Sithum Perera, [e21287@eng.pdn.ac.lk](mailto:e21287@eng.pdn.ac.lk)
-- e21229, Anna Kurera, [e21229@eng.pdn.ac.lk](mailto:e21229@eng.pdn.ac.lk)
-- e21055, Kasun Lakshan, [e21055@eng.pdn.ac.lk](mailto:e21055@eng.pdn.ac.lk)
-- e21253, Thenuka Ravindu, [e21253@eng.pdn.ac.lk](mailto:e21253@eng.pdn.ac.lk)
-
-<!-- Image of final hardware setup -->
+- **e21287**, Sithum Perera, [e21287@eng.pdn.ac.lk](mailto:e21287@eng.pdn.ac.lk)
+- **e21229**, Anna Kurera, [e21229@eng.pdn.ac.lk](mailto:e21229@eng.pdn.ac.lk)
+- **e21055**, Kasun Lakshan, [e21055@eng.pdn.ac.lk](mailto:e21055@eng.pdn.ac.lk)
+- **e21253**, Thenuka Ravindu, [e21253@eng.pdn.ac.lk](mailto:e21253@eng.pdn.ac.lk)
 
 ---
 
@@ -44,11 +42,13 @@ For elderly users, these challenges are amplified. Complex interfaces, limited i
 
 ## The Solution
 
-**MirrorX** transforms a standard mirror into an **intelligent smart mirror platform** that acts as a **personal assistant, smart home hub, and digital companion**.
+**ReflectStudio** transforms a standard mirror into an **intelligent smart mirror platform** that acts as a **personal assistant, smart home hub, and digital companion**.
 
-For everyday users, MirrorX helps utilize time effectively by displaying **schedules, emails, weather updates, music controls, and reminders** while getting ready—turning idle mirror time into productive moments. For elderly users, MirrorX provides a **conversational AI persona** that enables natural interaction and companionship, along with **environmental monitoring** that detects unusual temperature or humidity conditions to support comfort and safety.
+For everyday users, **ReflectStudio** helps utilize time effectively by displaying **schedules, emails, weather updates, music controls, and reminders** while getting ready—turning idle mirror time into productive moments. For elderly users, **ReflectStudio** provides a **conversational AI persona** that enables natural interaction and companionship, along with **environmental monitoring** that detects unusual temperature or humidity conditions to support comfort and safety.
 
-MirrorX combines **AI, IoT, and automation** with **voice, gesture, and face recognition**, offering a **hands-free, intuitive, and privacy-aware experience** suitable for both daily living and assisted care scenarios.
+
+
+**ReflectStudio** combines **AI, IoT, and automation** with **voice, gesture, and face recognition**, offering a **hands-free, intuitive, and privacy-aware experience** suitable for both daily living and assisted care scenarios.
 
 ---
 
@@ -56,22 +56,22 @@ MirrorX combines **AI, IoT, and automation** with **voice, gesture, and face rec
 
 ### High-Level Overview
 
-MirrorX follows a **Hybrid Edge–Cloud Architecture** consisting of three main layers:
+**ReflectStudio** follows a **Hybrid Edge–Cloud Architecture** consisting of three main layers:
 
 - **User Layer**
   - Interaction via voice, gestures, and presence
   - Personalized dashboard display on the mirror
-
 - **Edge Intelligence Layer**
   - Raspberry Pi handles sensor data processing
   - Local face encoding and recognition for fast authentication
   - Real-time control logic for smart devices
-
 - **Cloud Intelligence Layer**
   - **AWS S3** for secure profile image storage
   - **AWS Rekognition** for cloud-based facial recognition
   - Cloud AI services for conversational intelligence
   - Secure APIs for mobile app communication
+
+
 
 ---
 
@@ -80,18 +80,18 @@ MirrorX follows a **Hybrid Edge–Cloud Architecture** consisting of three main 
 ### Hardware Components
 
 | Component | Description |
-|--------|------------|
-| Raspberry Pi 4 | Central processing and control unit |
-| Monitor + Two-Way Mirror | Visual interface for smart display |
-| Camera Module 3 | Face recognition and user identification |
-| BME280 | Temperature and humidity sensing |
-| OPT3001 | Ambient light sensing |
-| HLK-LD2410 Radar | Presence detection |
-| Gesture Sensor (VL53L0X) | Gesture-based interaction |
-| WS2812B LED Strip | Smart lighting and visual feedback |
-| ESP32 | Smart switch and device control |
-| Relay Module | Fan and device actuation |
-| Microphone & Speakers | Voice interaction and AI responses |
+|:---|:---|
+| **Raspberry Pi 4** | Central processing and control unit |
+| **Monitor + Two-Way Mirror** | Visual interface for smart display |
+| **Camera Module 3** | Face recognition and user identification |
+| **BME280** | Temperature and humidity sensing |
+| **OPT3001** | Ambient light sensing |
+| **HLK-LD2410 Radar** | Presence detection |
+| **Gesture Sensor (VL53L0X)** | Gesture-based interaction |
+| **WS2812B LED Strip** | Smart lighting and visual feedback |
+| **ESP32** | Smart switch and device control |
+| **Relay Module** | Fan and device actuation |
+| **Microphone & Speakers** | Voice interaction and AI responses |
 
 ---
 
@@ -101,17 +101,14 @@ MirrorX follows a **Hybrid Edge–Cloud Architecture** consisting of three main 
   - Python-based backend logic
   - OpenCV for local face processing
   - Real-time sensor monitoring and automation
-
 - **AI Persona**
   - Speech-to-text and text-to-speech pipeline
   - Cloud-based conversational AI integration
-
 - **Mobile Companion App**
   - Built using Flutter
   - Face profile enrollment
   - Reminder scheduling and remote monitoring
   - Guardian/caregiver access
-
 - **Communication Protocols**
   - MQTT for IoT messaging
   - HTTPS for secure cloud communication
@@ -121,22 +118,22 @@ MirrorX follows a **Hybrid Edge–Cloud Architecture** consisting of three main 
 ## Testing
 
 ### Hardware Testing
-- Sensor accuracy validation for temperature, humidity, and light intensity
-- Presence detection range and reliability testing
-- Relay and smart device response verification
+* Sensor accuracy validation for temperature, humidity, and light intensity.
+* Presence detection range and reliability testing.
+* Relay and smart device response verification.
 
 ### Software Testing
-- Face recognition accuracy under varying lighting conditions
-- Latency testing for mobile app to mirror communication
-- AI interaction response time evaluation
-- Fail-safe testing for autonomous fan and lighting control
+* Face recognition accuracy under varying lighting conditions.
+* Latency testing for mobile app to mirror communication.
+* AI interaction response time evaluation.
+* Fail-safe testing for autonomous fan and lighting control.
 
 ---
 
 ## Detailed Budget
 
 | Item | Status | Cost (Rs.) |
-|------|--------|-----------|
+|:---|:---:|:---|
 | Raspberry Pi 4 Model B | Available | 26,000 |
 | Camera Module 3 | Available | 5,690 |
 | Two-Way Mirror | Approx. | 8,500 |
@@ -157,26 +154,17 @@ MirrorX follows a **Hybrid Edge–Cloud Architecture** consisting of three main 
 
 ## Commercialization Plans
 
-- **Consumer Smart Home Product**
-  - Daily-use smart mirror for homes
-
-- **Assisted Living & Elder Care**
-  - Companion-focused versions with caregiver dashboards
-
-- **Hospitality & Retail**
-  - Smart mirrors for hotels, gyms, and fitting rooms
-
-- **Modular DIY Kits**
-  - Pre-configured electronics kits for enthusiasts
-
-- **Premium Models**
-  - High-end mirror designs with luxury finishes
+* **Consumer Smart Home Product**: Daily-use smart mirror for homes.
+* **Assisted Living & Elder Care**: Companion-focused versions with caregiver dashboards.
+* **Hospitality & Retail**: Smart mirrors for hotels, gyms, and fitting rooms.
+* **Modular DIY Kits**: Pre-configured electronics kits for enthusiasts.
+* **Premium Models**: High-end mirror designs with luxury finishes.
 
 ---
 
 ## Conclusion
 
-MirrorX demonstrates how everyday objects can be transformed into **intelligent, emotionally aware systems** through the integration of AI and IoT. By focusing on **human-centered interaction, privacy-first design, and hybrid intelligence**, MirrorX delivers a smart mirror platform that supports productivity, companionship, and comfort—making technology feel **natural, supportive, and human**.
+**ReflectStudio** demonstrates how everyday objects can be transformed into **intelligent, emotionally aware systems** through the integration of AI and IoT. By focusing on **human-centered interaction, privacy-first design, and hybrid intelligence**, **ReflectStudio** delivers a smart mirror platform that supports productivity, companionship, and comfort—making technology feel **natural, supportive, and human**.
 
 ---
 
