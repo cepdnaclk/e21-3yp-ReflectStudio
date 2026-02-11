@@ -1,6 +1,6 @@
-# MirrorX: Intelligent Smart Mirror Platform
+# ReflectStudio: Intelligent Smart Mirror Platform
 
-**MirrorX** is a hybrid AI–IoT smart mirror system designed to enhance everyday productivity, smart living, and assisted care. By combining computer vision, environmental sensing, AI interaction, and cloud connectivity, MirrorX transforms a standard mirror into an intelligent home companion that fits naturally into daily routines for all users.
+**ReflectStudio** is a hybrid AI–IoT smart mirror system designed to enhance everyday productivity, smart living, and assisted care. By combining computer vision, environmental sensing, AI interaction, and cloud connectivity, MirrorX transforms a standard mirror into an intelligent home companion that fits naturally into daily routines for all users.
 
 ---
 
