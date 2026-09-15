@@ -3,7 +3,7 @@ import json
 from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 
-from models.app_state import notifications, priority_schedule
+from models.app_state import notifications, priority_schedule, presence_state
 from config.settings import BUCKET_NAME
 from config.aws_config import get_s3_client
 
@@ -13,8 +13,9 @@ def register_routes(app, bot, manager):
 
     @app.get("/api/presence/{status}")
     async def presence_trigger(status: str):
-        # Receives 'present' or 'absent' from the Serial Python script
-        # and broadcasts it to the Web UI via WebSockets.
+        # Receives 'present' or 'absent' from the Serial Python script,
+        # updates the shared state, and broadcasts it to the Web UI via WebSockets.
+        presence_state["status"] = status
         await manager.broadcast(json.dumps({"type": "presence", "value": status}))
         return {"status": "success", "received": status}
 
@@ -77,9 +78,8 @@ def register_routes(app, bot, manager):
     async def websocket_endpoint(websocket: WebSocket):
         await manager.connect(websocket)
         
-        # MOCK PRESENCE SENSOR: Automatically tell the UI that someone is present
-        # since we don't have the physical sensor running via serial_bridge.py
-        await websocket.send_text(json.dumps({"type": "presence", "value": "present"}))
+        # Send the current actual presence status on connection
+        await websocket.send_text(json.dumps({"type": "presence", "value": presence_state["status"]}))
 
         if bot.is_active:
             await websocket.send_text("show_mirror")

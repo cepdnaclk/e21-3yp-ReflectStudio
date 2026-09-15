@@ -6,3 +6,7 @@ notifications = []
 # Reminders are now populated in real-time from DynamoDB via s3_watcher.
 # This list starts empty; the mirror UI is updated every 60 s automatically.
 priority_schedule = []
+
+# Track the last known presence status of the user
+presence_state = {"status": "absent"}
+
