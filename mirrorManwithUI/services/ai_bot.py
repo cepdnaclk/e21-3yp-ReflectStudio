@@ -46,6 +46,8 @@ class SinhalaBot:
         self.is_active = False
         self.is_speaking = False   # True while TTS audio is playing
         self.recognizer = sr.Recognizer()
+        self.recognizer.energy_threshold = 300
+        self.recognizer.dynamic_energy_threshold = True
         # Stores alternating user/model turns for the current conversation session.
         # Cleared at the start of every new wake-word activation.
         self.conversation_history: list[types.Content] = []
@@ -187,6 +189,16 @@ class SinhalaBot:
         consecutive_errors = 0
         shutdown_keywords = ["goodbye", "stop", "shut down", "exit", "bye", "?????????"]
 
+        # Small pause so room audio / speaker output fades completely before opening mic
+        await asyncio.sleep(0.5)
+
+        # Calibrate baseline ambient noise ONCE before entering conversation loop
+        try:
+            with sr.Microphone() as source:
+                self.recognizer.adjust_for_ambient_noise(source, duration=0.3)
+        except Exception:
+            pass
+
         while self.is_active:
             print("\n?? Listening...")
             # Show idle.mp4 while waiting for user speech
@@ -199,7 +211,6 @@ class SinhalaBot:
                     continue
 
                 with sr.Microphone() as source:
-                    self.recognizer.adjust_for_ambient_noise(source, duration=0.2)
                     audio_data = await asyncio.to_thread(
                         self.recognizer.listen, source, timeout=7.0, phrase_time_limit=15.0
                     )
@@ -217,6 +228,9 @@ class SinhalaBot:
                 # Run English + Sinhala recognition in parallel for accurate detection
                 user_text, is_sinhala = await self._recognize_best(audio_data)
 
+                if not self.is_active:
+                    break
+
                 if not user_text or not user_text.strip():
                     print("?? No speech detected, ignoring...")
                     continue
@@ -225,9 +239,12 @@ class SinhalaBot:
                     print("?? Shutdown command received.")
                     await manager.broadcast(json.dumps({"type": "video", "state": "talking"}))
                     self.is_speaking = True
-                    await asyncio.to_thread(self.speak, "ස්තූතියි, නැවත හමුවෙමු.")
+                    await asyncio.to_thread(self.speak, "Thank you, see you again!")
                     self.is_speaking = False
                     self.is_active = False
+                    break
+
+                if not self.is_active:
                     break
 
                 print("🤔 Mirror is thinking...")
@@ -265,6 +282,9 @@ class SinhalaBot:
                     contents=contents
                 )
 
+                if not self.is_active:
+                    break
+
                 if response.text:
                     print(f"🤖 Mirror: {response.text}")
 
@@ -276,6 +296,9 @@ class SinhalaBot:
                             parts=[types.Part.from_text(text=response.text)]
                         )
                     )
+
+                    if not self.is_active:
+                        break
 
                     await manager.broadcast(json.dumps({"type": "video", "state": "talking"}))
                     self.is_speaking = True
@@ -320,7 +343,8 @@ class SinhalaBot:
                 await manager.broadcast(json.dumps({"type": "video", "state": "talking"}))
 
                 # 2. Mirror speaks greeting (logic waits here until audio finishes)
-                await asyncio.to_thread(self.speak, "ආයුබෝවන්! මම කෙසේද උදව් කරන්නේ?")
+                await asyncio.to_thread(self.speak, "Hello! How can I help you?")
+                await asyncio.sleep(0.5)
 
                 # 3. Back to idle before starting conversation
                 await manager.broadcast(json.dumps({"type": "video", "state": "idle"}))

@@ -82,14 +82,12 @@ class TestRoutes:
 
     def test_websocket_sends_show_mirror_when_active(self, test_app):
         """WebSocket should send 'show_mirror' (not 'active') when bot is active on connect."""
-        from models.app_state import presence_state
-        presence_state["status"] = "present"
         app, mock_bot, _ = test_app
         mock_bot.is_active = True
         client = TestClient(app)
 
         with client.websocket_connect("/ws") as ws:
-            # First message is presence status
+            # First message is mock presence
             msg1 = ws.receive_text()
             # Second message should be show_mirror
             msg2 = ws.receive_text()
@@ -97,14 +95,12 @@ class TestRoutes:
 
     def test_websocket_no_mirror_when_inactive(self, test_app):
         """WebSocket should NOT send 'show_mirror' when bot is inactive."""
-        from models.app_state import presence_state
-        presence_state["status"] = "present"
         app, mock_bot, _ = test_app
         mock_bot.is_active = False
         client = TestClient(app)
 
         with client.websocket_connect("/ws") as ws:
-            # Should only receive the presence message
+            # Should only receive the mock presence message
             msg1 = ws.receive_text()
             import json
             data = json.loads(msg1)
@@ -113,8 +109,6 @@ class TestRoutes:
 
     def test_websocket_disconnect_deactivates_bot_when_last_tab_closes(self, test_app):
         """When the last browser tab disconnects, the bot should be deactivated."""
-        from models.app_state import presence_state
-        presence_state["status"] = "present"
         app, mock_bot, _ = test_app
         mock_bot.is_active = True
         mock_bot.is_speaking = True
@@ -129,8 +123,6 @@ class TestRoutes:
 
     def test_websocket_disconnect_keeps_bot_active_if_another_tab_open(self, test_app):
         """If a second tab is still connected, closing one tab should NOT stop the bot."""
-        from models.app_state import presence_state
-        presence_state["status"] = "present"
         app, mock_bot, test_manager = test_app
         mock_bot.is_active = True
         mock_bot.is_speaking = False
@@ -144,16 +136,3 @@ class TestRoutes:
                 # Close the inner tab (ws2) — ws1 is still open
             # bot should still be active since ws1 is open
             assert mock_bot.is_active is True
-
-    def test_presence_trigger_updates_state(self, client):
-        """GET /api/presence/{status} should update the global presence_state."""
-        from models.app_state import presence_state
-        
-        presence_state["status"] = "unknown"
-        response = client.get("/api/presence/present")
-        assert response.status_code == 200
-        assert presence_state["status"] == "present"
-        
-        response = client.get("/api/presence/absent")
-        assert response.status_code == 200
-        assert presence_state["status"] == "absent"

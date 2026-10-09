@@ -28,7 +28,6 @@ from controllers.websocket_manager import manager
 from controllers.routes import register_routes
 from services.ai_bot import SinhalaBot
 from services.s3_watcher import check_s3_inbox
-from services.serial_bridge import run_serial_bridge
 
 # ================= INITIALIZE FASTAPI =================
 app = FastAPI()
@@ -65,11 +64,10 @@ async def run_periodic_face_indexing():
 # ================= STARTUP EVENT =================
 @app.on_event("startup")
 async def startup_event():
-    # Start the Bot, AWS Watcher, Face Indexer, and Serial Bridge alongside the Web Server!
+    # Start both the Bot and the AWS Watcher alongside the Web Server!
     asyncio.create_task(bot.run())
     asyncio.create_task(check_s3_inbox())
     asyncio.create_task(run_periodic_face_indexing())
-    asyncio.create_task(run_serial_bridge(manager))
 
 @app.on_event("shutdown")
 async def shutdown_event():

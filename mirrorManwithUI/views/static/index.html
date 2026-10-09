@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div id="mirror-wrapper">
+    <div id="mirror-wrapper" class="black-out">
         <div id="ui-layer">
 
             <div class="widget top-left combined-left-container">
@@ -72,7 +72,7 @@
 
         <div id="video-layer">
             <video id="mirror-video" loop muted playsinline>
-                <source src="static/idle.mp4" type="video/mp4">
+                <!-- src set dynamically by JS with cache-busting -->
             </video>
         </div>
 
@@ -129,6 +129,20 @@
     <!-- ================================================ -->
 
     <script>
+        // Cache-buster: forces the browser to re-fetch videos after every
+        // git pull / file change. Change this string any time you replace
+        // a video file and the browser still shows the old one.
+        const VER = Date.now();
+
+        // Helper: return a video URL with the cache-buster appended
+        function vidSrc(name) { return 'static/' + name + '?v=' + VER; }
+
+        // Set the default idle video on load (cache-busted)
+        (function() {
+            const v = document.getElementById('mirror-video');
+            v.src = vidSrc('idle.mp4');
+        })();
+
         function updateTime() {
             const now = new Date();
 
@@ -203,6 +217,69 @@
         let activeMsgTimer = null;
         let userHasBeenPresentWithBoxMsg = false;
 
+        let lastPresentTimestamp = 0;
+        let continuousPresentStartTime = 0;
+
+        function checkPresenceTimers() {
+            const now = Date.now();
+
+            if (!userIsPresent) {
+                // WAKING UP: Check if present for 5 continuous seconds
+                if (lastPresentTimestamp > 0 && (now - lastPresentTimestamp < 2500)) {
+                    if (continuousPresentStartTime === 0) {
+                        continuousPresentStartTime = now;
+                    } else if (now - continuousPresentStartTime >= 5000) { // 5s continuous presence
+                        console.log("✅ [Presence System] 5s continuous presence confirmed! Waking up UI.");
+                        userIsPresent = true;
+                        continuousPresentStartTime = 0;
+
+                        if (activeMessage && activeMsgState === 'FULLSCREEN') {
+                            clearActiveMsgTimer();
+                            displayFullscreen(activeMessage, 10);
+                            activeMsgTimer = setTimeout(() => {
+                                hideFullscreen();
+                                activeMessage = null;
+                                activeMsgState = null;
+                                updateBlackoutState();
+                            }, 10000);
+                        } else if (activeMessage && activeMsgState === 'NOTIFICATION_BOX') {
+                            userHasBeenPresentWithBoxMsg = true;
+                        }
+
+                        updateBlackoutState();
+                    }
+                } else {
+                    // Reset presence start time if presence signal dropped
+                    continuousPresentStartTime = 0;
+                }
+            } else {
+                // SLEEPING: Check if no presence signal received for 15 seconds
+                if (lastPresentTimestamp > 0 && (now - lastPresentTimestamp >= 15000)) {
+                    console.log("🌙 [Presence System] 15s absence threshold reached! Blacking out UI.");
+                    userIsPresent = false;
+                    continuousPresentStartTime = 0;
+
+                    // Deactivate Mirror Man avatar if active
+                    deactivateMirrorMan();
+
+                    // Notify backend that 15s absence is confirmed (stops bot & music)
+                    fetch('/api/presence/confirmed_absent').catch(() => {});
+
+                    if (activeMessage && activeMsgState === 'NOTIFICATION_BOX' && userHasBeenPresentWithBoxMsg) {
+                        clearNotificationBox();
+                        activeMessage = null;
+                        activeMsgState = null;
+                        userHasBeenPresentWithBoxMsg = false;
+                    }
+
+                    updateBlackoutState();
+                }
+            }
+        }
+
+        // Run presence timer checker twice per second (500ms)
+        setInterval(checkPresenceTimers, 500);
+
         function clearActiveMsgTimer() {
             if (activeMsgTimer) {
                 clearTimeout(activeMsgTimer);
@@ -258,6 +335,19 @@
             notifyBox.innerHTML = '<p class="status-text">No new messages</p>';
         }
 
+        function deactivateMirrorMan() {
+            const videoLayer = document.getElementById('video-layer');
+            const uiLayer = document.getElementById('ui-layer');
+            const v = document.getElementById('mirror-video');
+
+            if (mirrorActive) {
+                mirrorActive = false;
+                if (videoLayer) videoLayer.classList.remove('visible');
+                if (uiLayer) uiLayer.classList.remove('hidden');
+                if (v) v.pause();
+            }
+        }
+
         function updateBlackoutState() {
             const wrapper = document.getElementById('mirror-wrapper');
             const v = document.getElementById('mirror-video');
@@ -267,8 +357,9 @@
                 if (activeMsgState === 'FULLSCREEN') {
                     wrapper.classList.remove('black-out');
                 } else {
+                    deactivateMirrorMan();
                     wrapper.classList.add('black-out');
-                    v.pause();
+                    if (v) v.pause();
                 }
             }
         }
@@ -295,7 +386,7 @@
                     mirrorActive = true;
                     uiLayer.classList.add('hidden');
                     videoLayer.classList.add('visible');
-                    if (!v.src.includes('idle.mp4')) { v.src = 'static/idle.mp4'; }
+                    if (!v.src.includes('idle.mp4')) { v.src = vidSrc('idle.mp4'); }
                     v.play();
                     return;
                 }
@@ -308,17 +399,17 @@
                 }
                 if (payload === 'idle') {
                     if (mirrorActive) {
-                        if (!v.src.includes('idle.mp4')) { v.src = 'static/idle.mp4'; }
+                        if (!v.src.includes('idle.mp4')) { v.src = vidSrc('idle.mp4'); }
                         v.play();
                     }
                     return;
                 }
                 if (payload === 'thinking') {
-                    if (!v.src.includes('thinking.mp4')) { v.src = 'static/thinking.mp4'; v.play(); }
+                    if (!v.src.includes('thinking.mp4')) { v.src = vidSrc('thinking.mp4'); v.play(); }
                     return;
                 }
                 if (payload === 'talking') {
-                    if (!v.src.includes('talking.mp4')) { v.src = 'static/talking.mp4'; v.play(); }
+                    if (!v.src.includes('talking.mp4')) { v.src = vidSrc('talking.mp4'); v.play(); }
                     return;
                 }
                 return;
@@ -349,17 +440,17 @@
                 const state = payload.state;
                 if (state === 'idle') {
                     if (mirrorActive) {
-                        if (!v.src.includes('idle.mp4')) { v.src = 'static/idle.mp4'; }
+                        if (!v.src.includes('idle.mp4')) { v.src = vidSrc('idle.mp4'); }
                         v.play();
                     }
                     return;
                 }
                 if (state === 'talking') {
-                    if (!v.src.includes('talking.mp4')) { v.src = 'static/talking.mp4'; v.play(); }
+                    if (!v.src.includes('talking.mp4')) { v.src = vidSrc('talking.mp4'); v.play(); }
                     return;
                 }
                 if (state === 'thinking') {
-                    if (!v.src.includes('thinking.mp4')) { v.src = 'static/thinking.mp4'; v.play(); }
+                    if (!v.src.includes('thinking.mp4')) { v.src = vidSrc('thinking.mp4'); v.play(); }
                     return;
                 }
                 return;
@@ -377,32 +468,15 @@
 
             if (payload && payload.type === 'presence') {
                 const isPresent = payload.value === 'present';
-                userIsPresent = isPresent;
+                const now = Date.now();
 
                 if (isPresent) {
-                    if (activeMessage && activeMsgState === 'FULLSCREEN') {
-                        // Reset timer to 10 seconds since they just appeared
-                        clearActiveMsgTimer();
-                        displayFullscreen(activeMessage, 10);
-                        activeMsgTimer = setTimeout(() => {
-                            hideFullscreen();
-                            activeMessage = null;
-                            activeMsgState = null;
-                            updateBlackoutState();
-                        }, 10000);
-                    } else if (activeMessage && activeMsgState === 'NOTIFICATION_BOX') {
-                        userHasBeenPresentWithBoxMsg = true;
-                    }
+                    lastPresentTimestamp = now;
                 } else {
-                    if (activeMessage && activeMsgState === 'NOTIFICATION_BOX' && userHasBeenPresentWithBoxMsg) {
-                        clearNotificationBox();
-                        activeMessage = null;
-                        activeMsgState = null;
-                        userHasBeenPresentWithBoxMsg = false;
-                    }
+                    continuousPresentStartTime = 0;
                 }
 
-                updateBlackoutState();
+                checkPresenceTimers();
                 return;
             }
 
@@ -604,8 +678,9 @@
         //  PHOTO GALLERY CONTROLLER
         // =====================================================
         const Gallery = (() => {
-            const SLIDE_DURATION_MS  = 8000;   // ms each photo is shown
-            const AUTO_CLOSE_MS      = 90000;  // auto-close after 90 s
+            const SLIDE_DURATION_MS = 8000;   // ms each photo is shown
+            const AUTO_CLOSE_MS     = 90000;  // auto-close after 90 s
+            const MAX_PHOTOS        = 10;     // cap to protect RPi memory
             const KB_CLASSES = ['kb-zoom-in', 'kb-pan-right', 'kb-pan-left', 'kb-zoom-out'];
 
             let photos        = [];   // [{key, url}, ...]
@@ -613,8 +688,9 @@
             let slideTimer    = null;
             let autoCloseTimer = null;
             let progressTimer  = null;
+            let singleSlide   = null; // only ONE slide DOM node reused
 
-            // DOM refs (resolved once the page loads)
+            // DOM refs
             const overlay     = () => document.getElementById('photo-gallery-overlay');
             const stage       = () => document.getElementById('gallery-stage');
             const dotsWrap    = () => document.getElementById('gallery-dots');
@@ -623,25 +699,21 @@
             const loader      = () => document.getElementById('gallery-loader');
             const empty       = () => document.getElementById('gallery-empty');
 
-            function _showLoader(yes) {
-                loader().style.display = yes ? 'flex' : 'none';
-            }
-            function _showEmpty(yes) {
-                empty().style.display = yes ? 'flex' : 'none';
+            function _showLoader(yes) { loader().style.display = yes ? 'flex' : 'none'; }
+            function _showEmpty(yes)  { empty().style.display  = yes ? 'flex' : 'none'; }
+
+            // LAZY: Create only ONE slide element and swap its background per photo
+            function _ensureSlide() {
+                if (!singleSlide) {
+                    singleSlide = document.createElement('div');
+                    singleSlide.className = 'gallery-slide';
+                    stage().insertBefore(singleSlide, document.getElementById('gallery-prev'));
+                }
             }
 
-            function _buildSlides() {
-                // Remove old slides (keep nav, dots, hint, progress)
-                stage().querySelectorAll('.gallery-slide').forEach(s => s.remove());
+            function _buildDots() {
                 dotsWrap().innerHTML = '';
-
-                photos.forEach((photo, i) => {
-                    const slide = document.createElement('div');
-                    slide.className = 'gallery-slide';
-                    slide.style.backgroundImage = `url('${photo.url}')`;
-                    stage().insertBefore(slide, document.getElementById('gallery-prev'));
-
-                    // Dot
+                photos.forEach((_, i) => {
                     const dot = document.createElement('button');
                     dot.className = 'gallery-dot';
                     dot.setAttribute('aria-label', `Photo ${i + 1}`);
@@ -657,22 +729,21 @@
                 countEl().textContent = `${currentIndex + 1} / ${photos.length}`;
             }
 
+            // LAZY: Only load the current photo's URL into the single slide node
             function _activateSlide(index) {
-                const slides = stage().querySelectorAll('.gallery-slide');
-                slides.forEach((s, i) => {
-                    s.classList.remove('active');
-                    // Remove all Ken Burns classes
-                    KB_CLASSES.forEach(c => s.classList.remove(c));
-                });
+                _ensureSlide();
+                const photo = photos[index];
+                if (!photo) return;
 
-                const active = slides[index];
-                if (!active) return;
+                // Swap the background image — only THIS photo is downloaded now
+                singleSlide.style.backgroundImage = `url('${photo.url}')`;
 
-                // Pick a random Ken Burns effect
+                // Remove all Ken Burns classes, force reflow, re-add one
+                KB_CLASSES.forEach(c => singleSlide.classList.remove(c));
+                singleSlide.classList.remove('active');
+                void singleSlide.offsetWidth; // force reflow to restart CSS animation
                 const kb = KB_CLASSES[index % KB_CLASSES.length];
-                // Force reflow to restart CSS animation
-                void active.offsetWidth;
-                active.classList.add('active', kb);
+                singleSlide.classList.add('active', kb);
 
                 _updateDots();
                 _startProgressBar();
@@ -684,7 +755,6 @@
                 clearTimeout(progressTimer);
                 bar.style.transition = 'none';
                 bar.style.width = '100%';
-                // Trigger reflow
                 void bar.offsetWidth;
                 bar.style.transition = `width ${SLIDE_DURATION_MS}ms linear`;
                 bar.style.width = '0%';
@@ -722,7 +792,8 @@
                 try {
                     const res  = await fetch('/api/photos');
                     const data = await res.json();
-                    photos = (data.photos || []);
+                    // Cap to MAX_PHOTOS to protect RPi from memory overload
+                    photos = (data.photos || []).slice(0, MAX_PHOTOS);
                 } catch (e) {
                     console.error('Gallery: failed to fetch photos', e);
                     photos = [];
@@ -732,17 +803,15 @@
 
                 if (photos.length === 0) {
                     _showEmpty(true);
-                    // Auto-close after 8 s if no photos
                     autoCloseTimer = setTimeout(close, 8000);
                     return;
                 }
 
                 currentIndex = 0;
-                _buildSlides();
-                _activateSlide(0);
+                _buildDots();
+                _activateSlide(0); // only loads photo[0] — lazy!
                 _scheduleNext();
 
-                // Auto-close safety net
                 autoCloseTimer = setTimeout(close, AUTO_CLOSE_MS);
             }
 
@@ -750,23 +819,20 @@
                 _clearTimers();
                 overlay().classList.remove('gallery-visible');
 
-                // Clean up slides after fade-out
                 setTimeout(() => {
-                    stage().querySelectorAll('.gallery-slide').forEach(s => s.remove());
+                    if (singleSlide) {
+                        singleSlide.remove();
+                        singleSlide = null;
+                    }
                     dotsWrap().innerHTML = '';
                     countEl().textContent = '';
                     photos = [];
                 }, 900);
             }
 
-            // Wire up arrow buttons
             document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('gallery-prev').addEventListener('click', () => {
-                    _goTo(currentIndex - 1);
-                });
-                document.getElementById('gallery-next').addEventListener('click', () => {
-                    _goTo(currentIndex + 1);
-                });
+                document.getElementById('gallery-prev').addEventListener('click', () => _goTo(currentIndex - 1));
+                document.getElementById('gallery-next').addEventListener('click', () => _goTo(currentIndex + 1));
             });
 
             return { open, close };
