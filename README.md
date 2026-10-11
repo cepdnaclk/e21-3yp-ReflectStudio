@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="docs/images/reflectcare_mirror.png"
+       alt="ReflectCare Smart Mirror"
+       width="650">
+</p>
+
 <div align="center">
 
 # ReflectCare
