@@ -1,5 +1,42 @@
+
 {
   "title": "ReflectCare - AI-Powered Smart Mirror",
+  "team": [
+    {
+      "name": "Anna Kurera",
+      "email": "e21229@eng.pdn.ac.lk",
+      "eNumber": "E/21/229"
+    },
+    {
+      "name": "Sithum Perera",
+      "email": "e21287@eng.pdn.ac.lk",
+      "eNumber": "E/21/XXX"
+    },
+    {
+      "name": "Thenuka Ravindu",
+      "email": "e21253@eng.pdn.ac.lk",
+      "eNumber": "E/21/XXX"
+    },
+    {
+      "name": "Kasun Lakshan",
+      "email": "e21055@eng.pdn.ac.lk",
+      "eNumber": "E/21/XXX"
+    }
+  ],
+  "supervisors": [
+    {
+      "name": "Ms. Yasodha Vimukthi",
+      "email": "yasodhav@eng.pdn.ac.lk"
+    },
+    {
+      "name": "Mr. Thilina Gunarathne",
+      "email": "thilinag@eng.pdn.ac.lk"
+    },
+    {
+      "name": "Chandula Adhikari",
+      "email": "e19008@eng.pdn.ac.lk"
+    }
+  ],
   "tags": [
     "AI",
     "IoT",
@@ -9,3 +46,4 @@
   "image": "thumbnail.png",
   "thumbnail": "thumbnail.png"
 }
+
