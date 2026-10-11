@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/reflectcare_mirror.png"
+  <img src="docs/assets/thumbnail.png"
        alt="ReflectCare Smart Mirror"
        width="650">
 </p>
